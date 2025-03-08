@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure UI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; overflow: hidden; }
+        #c { width: 380px; height: 700px; position: relative; border-radius: 40px; border: 10px solid #222; background: linear-gradient(135deg, #1a1a1a, #333); box-shadow: 0 0 20px rgba(255,255,255,0.1); overflow: hidden; }
+        iframe { width: 100%; height: 100%; border-radius: 30px; border: none; }
+        #b { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); width: 250px; background: rgba(0,102,255,0.2); backdrop-filter: blur(15px); border-radius: 15px; padding: 10px; text-align: center; cursor: grab; color: white; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 0 15px rgba(0,102,255,0.3); }
+        .g { color: lime; } .s { color: orange; }
+        #tg { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; cursor: grab; transition: 0.3s; }
+        #tg:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+    <div id="c">
+        <iframe id="f"></iframe>
+        <div id="b">
+            <div>🔢 Period: <span id="p"></span></div>
+            <div>📊 Result: <span id="r"></span></div>
+            <div>⏳ Timer: <span id="t"></span></div>
+        </div>
+        <img id="tg" src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+    </div>
+    <script>
+        (function() {
+            let a = document.getElementById("p"), b = document.getElementById("r"), c = document.getElementById("t"), d = document.getElementById("b"), e = document.getElementById("tg"), f = document.getElementById("f");
+
+            function g() {
+                let h = atob("aHR0cHM6Ly9iZGd3aW4uY2MvIy9yZWdpc3Rlcj9pbnZpdGF0aW9uQ29kZT0zNzIxNzE0MDA1MjA=");
+                f.src = h;
+            }
+
+            function i() {  
+                let j = new Date(), k = j.getUTCFullYear(), l = String(j.getUTCMonth() + 1).padStart(2, '0'), m = String(j.getUTCDate()).padStart(2, '0'), n = j.getUTCHours(), o = j.getUTCMinutes(), p = n * 60 + o, q = `${k}${l}${m}1000${10001 + p}`;
+                a.innerText = q;
+                let r = [...q.slice(-2)].reduce((s, t) => s + parseInt(t), 0);
+                r = r > 9 ? [...String(r)].reduce((u, v) => u + parseInt(v), 0) : r;
+                let w = r >= 5 ? "BIG" : "SMALL";
+                b.innerHTML = `<span class="${r >= 5 ? 'g' : 's'}">${w}`;  
+                let x = j.getUTCSeconds(), y = x === 0 ? 59 : 59 - x;
+                c.innerText = `00:${String(y).padStart(2, '0')}`;
+            }  
+
+            setInterval(i, 1000);
+            i();
+            g();
+
+            function z(A) {
+                let B = false, C, D;
+                A.addEventListener("mousedown", (E) => {
+                    B = true;
+                    C = E.clientX - A.getBoundingClientRect().left;
+                    D = E.clientY - A.getBoundingClientRect().top;
+                });
+
+                document.addEventListener("mousemove", (F) => {
+                    if (B) {
+                        A.style.left = `${F.clientX - C}px`;
+                        A.style.top = `${F.clientY - D}px`;
+                    }
+                });
+
+                document.addEventListener("mouseup", () => { B = false; });
+
+                A.addEventListener("touchstart", (G) => {
+                    B = true;
+                    let H = G.touches[0];
+                    C = H.clientX - A.getBoundingClientRect().left;
+                    D = H.clientY - A.getBoundingClientRect().top;
+                });
+
+                document.addEventListener("touchmove", (I) => {
+                    if (B) {
+                        let J = I.touches[0];
+                        A.style.left = `${J.clientX - C}px`;
+                        A.style.top = `${J.clientY - D}px`;
+                    }
+                });
+
+                document.addEventListener("touchend", () => { B = false; });
+            }
+
+            z(d);
+            z(e);
+
+            e.addEventListener("click", function() {
+                let K = atob("aHR0cHM6Ly90ZWxlZ3JhbS5tZS9hcGttb2RkZXJraW5n");
+                window.open(K, "_blank");
+            });
+
+        })();
+    </script>
+</body>
+</html>
